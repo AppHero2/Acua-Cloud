@@ -45,6 +45,11 @@ app.use(function(err, req, res, next) {
 
 function Acua_Cloud() {
 
+  this.init = () => {
+    
+    scheduleJob();
+  }
+
   this.scheduleJob = () => {
     var http = require('https');
     setInterval(function(){
