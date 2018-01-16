@@ -43,4 +43,31 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+function Acua_Cloud() {
+
+  this.scheduleJob = () => {
+    var http = require('https');
+    setInterval(function(){
+        http.get('https://acua-node.herokuapp.com/');
+    },300000);
+
+    setInterval(function(){
+        doManageNotification();
+    }, 60000); 
+  }
+
+  this.doManageNotification = () => {
+    // check
+    console.log("doManageNotification"); 
+  }
+
+}
+
+Acua_Cloud.startInstance = () => {
+  var acua_cloud = new Acua_Cloud();
+  return acua_cloud;
+}
+
+Acua_Cloud.startInstance();
+
 module.exports = app;
