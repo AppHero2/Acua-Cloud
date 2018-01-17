@@ -4,9 +4,21 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var http = require('https');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+
+var firebase      = require('firebase');
+var firebaseConfig = {
+    apiKey: "AIzaSyC7WLrXwGPXGO_lGnz3YsAzU8YB04IF6jc",
+    authDomain: "acua-a3c6b.firebaseapp.com",
+    databaseURL: "https://acua-a3c6b.firebaseio.com",
+    projectId: "acua-a3c6b",
+    storageBucket: "acua-a3c6b.appspot.com",
+    messagingSenderId: "173602554771"
+};
+firebase.initializeApp(firebaseConfig);
 
 var app = express();
 
@@ -45,31 +57,89 @@ app.use(function(err, req, res, next) {
 
 function Acua_Cloud() {
 
-  this.init = () => {
-    
-    scheduleJob();
-  }
-
   this.scheduleJob = () => {
-    var http = require('https');
-    setInterval(function(){
+    
+    setInterval(function() {
         http.get('https://acua-node.herokuapp.com/');
     },300000);
 
     setInterval(function(){
         doManageNotification();
-    }, 60000); 
+    }, 60000);
   }
 
-  this.doManageNotification = () => {
-    // check
-    console.log("doManageNotification"); 
+  function doManageNotification(){
+    var date = new Date();
+    var currentTime = date.getTime();
+    var query = firebase.database().ref('Orders').orderByChild('serviceStatus').equalTo('PENDING');
+    query.once('value', function(snapshot){
+      if(snapshot.val() != null) {
+        var pushTokens = new Array();
+        snapshot.forEach(function(obj){
+          var customerId = obj.val().customerId;
+          var customerPushToken = obj.val().customerPushToken;
+          var beginAt = obj.val().beginAt;
+          var prevAt = beginAt - 86400000;
+          if (prevAt <= currentTime && customerPushToken!=null) {
+            pushTokens.push(customerPushToken);
+          }
+
+          if (pushTokens.length > 0) {
+            //TODO : send notification to remind
+            var message = { 
+              app_id: "1f9e701b-7709-40e6-a1b6-7dff0ee29b42",
+              contents: {"en": "The 24-hour countdown to your acua experience has begun"},
+              included_segments: pushTokens
+            };
+            
+            sendNotification(message);
+          }
+        });
+      }
+    });
   }
+
+  this.start = () => {
+    var self = this;
+    self.scheduleJob();
+  };
+
+  var sendNotification = function(data) {
+    var headers = {
+      "Content-Type": "application/json; charset=utf-8",
+      "Authorization": "Basic ZWUwOGU1NjQtOTQ4NS00MDkwLThkYjEtNjhlZTg1OWZkNTIz"
+    };
+    
+    var options = {
+      host: "onesignal.com",
+      port: 443,
+      path: "/api/v1/notifications",
+      method: "POST",
+      headers: headers
+    };
+    
+    var https = require('https');
+    var req = https.request(options, function(res) {  
+      res.on('data', function(data) {
+        console.log("Response:");
+        console.log(JSON.parse(data));
+      });
+    });
+    
+    req.on('error', function(e) {
+      console.log("ERROR:");
+      console.log(e);
+    });
+    
+    req.write(JSON.stringify(data));
+    req.end();
+  };
 
 }
 
 Acua_Cloud.startInstance = () => {
   var acua_cloud = new Acua_Cloud();
+  acua_cloud.start();
   return acua_cloud;
 }
 
