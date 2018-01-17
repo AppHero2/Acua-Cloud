@@ -80,7 +80,7 @@ function Acua_Cloud() {
           var customerPushToken = obj.val().customerPushToken;
           var beginAt = obj.val().beginAt;
           var prevAt = beginAt - 86400000;
-          if (prevAt <= currentTime && customerPushToken!=null) {
+          if (prevAt <= currentTime && currentTime < prevAt+60000 && customerPushToken!=null) {
             pushTokens.push(customerPushToken);
           }
 
