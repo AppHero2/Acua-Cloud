@@ -63,10 +63,10 @@ function Acua_Cloud() {
         http.get('https://acua-node.herokuapp.com/');
     },300000);
 
-    // setInterval(function(){
-    //     doManageNotification();
-    // }, 60000);
-    doManageNotification();
+    setInterval(function(){
+        doManageNotification();
+    }, 60000);
+    
   }
 
   function doManageNotification(){
