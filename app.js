@@ -81,11 +81,11 @@ function Acua_Cloud() {
           var customerPushToken = obj.val().customerPushToken;
           var beginAt = obj.val().beginAt;
           var prevAt = beginAt - 86400000; // 24hr
-          var nextAt = beginAt;//beginAt - 86000000; // 23.8
+          var nextAt = beginAt - 86000000; // 23.8
           if (prevAt <= currentTime && currentTime < nextAt && customerPushToken!=null) {
             pushTokens.push(customerPushToken);
 
-            // firebase.database().ref('Orders').child(obj.key).child('is24reminded').set(true);
+            firebase.database().ref('Orders').child(obj.key).child('is24reminded').set(true);
             var notificationRef = firebase.database().ref('Notifications').child(customerId).push();
             var notificationKey = notificationRef.key; 
             var notification = {
