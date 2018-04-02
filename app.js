@@ -93,7 +93,7 @@ function Acua_Cloud() {
               'createdAt': currentTime,
               'isRead' : false,
               'title' : 'Reminder',
-              'message' : 'The 24-hour countdown to your acua experience has begun' 
+              'message' : 'The 24-hour countdown to your acuar experience has begun' 
             };
             notificationRef.set(notification, function(error){
               if (error) {
@@ -106,7 +106,7 @@ function Acua_Cloud() {
             //TODO : send notification to remind
             var message = { 
               app_id: "1f9e701b-7709-40e6-a1b6-7dff0ee29b42",
-              contents: {"en": "The 24-hour countdown to your acua experience has begun"},
+              contents: {"en": "The 24-hour countdown to your acuar experience has begun"},
               // included_segments: ["Active Users"],
               include_player_ids: pushTokens,
             };
