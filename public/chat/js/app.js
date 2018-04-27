@@ -57,7 +57,7 @@ App.prototype.renderDashboard = function (activeTabName) {
     listeners.setListeners();
 
     logoutBtn.addEventListener('click', function () {
-        QB.users.delete(app.user.id, function(err, user){
+        /*QB.users.delete(app.user.id, function(err, user){
             if (err) {
                 console.error('Can\'t delete user by id: '+app.user.id+' ', err);
                 
@@ -73,7 +73,17 @@ App.prototype.renderDashboard = function (activeTabName) {
             QB.chat.disconnect();
             
             router.navigate('#!/login');
-        });
+        });*/
+
+        QB.logout(function(err, result){ if (result) { 
+            // success
+            localStorage.removeItem('user');
+            QB.chat.disconnect();
+            router.navigate('#!/login'); 
+        } else { 
+            // error 
+        } });
+        
     });
 
     this.tabSelectInit();
