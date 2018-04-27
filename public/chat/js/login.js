@@ -45,7 +45,7 @@ Login.prototype.login = function (user) {
                 QB.login(userRequiredParams, function(loginErr, loginUser){
                     if(loginErr) {
                         /** Login failed, trying to create account */
-                        QB.users.create(user, function (createErr, createUser) {
+                        /*QB.users.create(user, function (createErr, createUser) {
                             if (createErr) {
                                 loginError(createErr);
                             } else {
@@ -57,10 +57,13 @@ Login.prototype.login = function (user) {
                                     }
                                 });
                             }
-                        });
+                        });*/
+
+                        alert(loginErr);
+
                     } else {
                         /** Update info */
-                        if(loginUser.user_tags !== user.tag_list || loginUser.full_name !== user.full_name) {
+                        /*if(loginUser.user_tags !== user.tag_list || loginUser.full_name !== user.full_name) {
                             QB.users.update(loginUser.id, {
                                 'full_name': user.full_name,
                                 'tag_list': user.tag_list
@@ -73,7 +76,8 @@ Login.prototype.login = function (user) {
                             });
                         } else {
                             loginSuccess(loginUser);
-                        }
+                        }*/
+                        loginSuccess(loginUser);
                     }
                 });
             }
