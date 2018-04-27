@@ -75,14 +75,17 @@ App.prototype.renderDashboard = function (activeTabName) {
             router.navigate('#!/login');
         });*/
 
-        QB.logout(function(err, result){ if (result) { 
+        QB.logout(function(err, result){ 
+            if (result) { 
             // success
-            localStorage.removeItem('user');
-            QB.chat.disconnect();
-            router.navigate('#!/login'); 
-        } else { 
-            // error 
-        } });
+            console.log('logout - success');
+                localStorage.removeItem('user');
+                QB.chat.disconnect();
+                router.navigate('#!/login'); 
+            } else { 
+                // error 
+                console.log('logout - failed');
+            } });
         
     });
 
