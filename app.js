@@ -65,6 +65,8 @@ function Acua_Cloud() {
 
     setInterval(function(){
         doCheck24Reminder();
+
+        doSendRatingServiceMessage();
     }, 60000);
     
     doTrackOrder();
@@ -75,45 +77,18 @@ function Acua_Cloud() {
     query.on('child_added', function(snapshot) {
       if(snapshot.val()!=null){
         var orderID = snapshot.key;
-        var customerId = snapshot.val().customerId;
-        var customerPushToken = snapshot.val().customerPushToken;
         var serviceStatus = snapshot.val().serviceStatus;
         var isRateReminded = snapshot.val().isRateReminded!=null?snapshot.val().isRateReminded:false;
         var date = new Date();
         var currentTime = date.getTime();
         if (serviceStatus == "COMPLETED" && isRateReminded==false){
-          firebase.database().ref('Orders').child(orderID).child('isRateReminded').set(true);
-          var notificationRef = firebase.database().ref('Notifications').child(customerId).push();
-          var notificationKey = notificationRef.key; 
-          var notification = {
-            'idx': notificationKey,
-            'createdAt': currentTime,
-            'isRead' : false,
-            'title' : 'Please Rate our Service',
-            'message' : 'Please rate our service for your experience.' 
-          };
-          notificationRef.set(notification, function(error){
-            if (error) {
-                console.log('notification : ', error);
-            }
-          });
-
-          if (customerPushToken!=null) {
-            var message = { 
-              app_id: "1f9e701b-7709-40e6-a1b6-7dff0ee29b42",
-              contents: {"en": "Please Rate our Service"},
-              include_player_ids: [customerPushToken],
-            };
-            
-            sendNotification(message);
-
-          }
+          firebase.database().ref('Orders').child(orderID).child('completedAt').set(currentTime);
         }
       }
     });
   }
 
-  function doCheck24Reminder(){
+  function doCheck24Reminder() {
     var date = new Date();
     var currentTime = date.getTime();
     var query = firebase.database().ref('Orders').orderByChild('is24reminded').equalTo(false);
@@ -160,6 +135,53 @@ function Acua_Cloud() {
         });
       }
     });
+  }
+
+  function doSendRatingServiceMessage() {
+    var query = firebase.database().ref('Orders').orderByChild('serviceStatus').equalTo('COMPLETED');
+    query.once('child_added', snapshot => {
+      if(snapshot.val()!=null){
+        var orderID = snapshot.key;
+        var customerId = snapshot.val().customerId;
+        var customerPushToken = snapshot.val().customerPushToken;
+        var serviceStatus = snapshot.val().serviceStatus;
+        var isRateReminded = snapshot.val().isRateReminded!=null?snapshot.val().isRateReminded:false;
+        var date = new Date();
+        var currentTime = date.getTime();
+        var completedAt = snapshot.val().completedAt || currentTime;
+
+        var delayedTime = (currentTime - completedAt);
+
+        if (serviceStatus == "COMPLETED" && isRateReminded==false && delayedTime >= 86400000){
+          firebase.database().ref('Orders').child(orderID).child('isRateReminded').set(true);
+          var notificationRef = firebase.database().ref('Notifications').child(customerId).push();
+          var notificationKey = notificationRef.key; 
+          var notification = {
+            'idx': notificationKey,
+            'createdAt': currentTime,
+            'isRead' : false,
+            'title' : 'Please Rate our Service',
+            'message' : 'Please rate our service for your experience.' 
+          };
+          notificationRef.set(notification, function(error){
+            if (error) {
+                console.log('notification : ', error);
+            }
+          });
+
+          if (customerPushToken!=null) {
+            var message = { 
+              app_id: "1f9e701b-7709-40e6-a1b6-7dff0ee29b42",
+              contents: {"en": "Please Rate our Service"},
+              include_player_ids: [customerPushToken],
+            };
+            
+            sendNotification(message);
+          }
+        }
+      }
+    })
+    
   }
 
   this.start = () => {
