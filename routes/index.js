@@ -9,6 +9,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.use('/payment', payment);
-router.use('./email', email);
+router.use('/email', email);
 
 module.exports = router;
