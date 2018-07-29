@@ -34,7 +34,9 @@ router.post('/send', (req, res, next) => {
     // send mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            return console.log(error);
+            res.status(402).send(error);
+        } else {
+            res.status(200).send('Message sent: %s', info.messageId);
         }
         console.log('Message sent: %s', info.messageId);
     }); 
