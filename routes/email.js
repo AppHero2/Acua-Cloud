@@ -36,7 +36,7 @@ router.post('/send', (req, res, next) => {
         if (error) {
             res.status(402).send(error);
         } else {
-            res.status(200).send('Message sent: %s', info.messageId);
+            res.status(200).send(info);
         }
         console.log('Message sent: %s', info.messageId);
     }); 
