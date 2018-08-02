@@ -72,10 +72,10 @@ function Acua_Cloud() {
     doTrackOrder();
   }
 
-  function doTrackOrder(){
+  function doTrackOrder() {
     var query = firebase.database().ref('Orders').orderByChild('serviceStatus').equalTo('COMPLETED');
     query.on('child_added', function(snapshot) {
-      if(snapshot.val()!=null){
+      if (snapshot.val() != null) {
         var orderID = snapshot.key;
         var serviceStatus = snapshot.val().serviceStatus;
         var isRateReminded = snapshot.val().isRateReminded!=null?snapshot.val().isRateReminded:false;
@@ -139,16 +139,19 @@ function Acua_Cloud() {
 
   function doSendRatingServiceMessage() {
     var query = firebase.database().ref('Orders').orderByChild('serviceStatus').equalTo('COMPLETED');
-    query.once('child_added', snapshot => {
-      if(snapshot.val()!=null){
-        var orderID = snapshot.key;
-        var customerId = snapshot.val().customerId;
-        var customerPushToken = snapshot.val().customerPushToken;
-        var serviceStatus = snapshot.val().serviceStatus;
-        var isRateReminded = snapshot.val().isRateReminded!=null?snapshot.val().isRateReminded:false;
+    query.once('value', snapshot => {
+      snapshot.forEach(function(childSnapshot) {
+        var childKey = childSnapshot.key;
+        var childData = childSnapshot.val();
+        
+        var orderID = childKey;
+        var customerId = childData.customerId;
+        var customerPushToken = childData.customerPushToken;
+        var serviceStatus = childData.serviceStatus;
+        var isRateReminded = childData.isRateReminded!=null?childData.isRateReminded:false;
         var date = new Date();
         var currentTime = date.getTime();
-        var completedAt = snapshot.val().completedAt || currentTime;
+        var completedAt = childData.completedAt || currentTime;
 
         var delayedTime = (currentTime - completedAt);
 
@@ -179,7 +182,8 @@ function Acua_Cloud() {
             sendNotification(message);
           }
         }
-      }
+
+      });
     })
     
   }

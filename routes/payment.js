@@ -7,10 +7,26 @@ var stripe = require('stripe')(process.env.STRIPE_SECURITY_KEY);
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+    let order = req.query.order || '';
+    let cost  = req.query.cost || 0.00;
+    res.render('payment', { order: order, cost: cost });
+});
+
+router.get('/cancel', function(req, res, next) {
+    res.render('payment-cancel', {title: 'Payment', content:'You cancelled payment'})
+});
+
+router.get('/return', function(req, res, next) {
+    res.render('payment-cancel', {title: 'Payment', content:'Your payment succeed'})
+});
+
+router.get('/notify', function(req, res, next) {
+    console.log('notify : ', req);
 });
 
 
+
+///----------------Stripe------------------------------///
 function createCharge(charge) {
 
     return new Promise((resolve, reject) => {

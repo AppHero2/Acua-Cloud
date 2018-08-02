@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Checkout</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>Checkout</h1>
+    <p>Order : <%= order %></p>
+    <p>Cost  : <%= cost %></p>
+      <form action="https://sandbox.payfast.co.za/eng/process" method="POST">
+        <input type="hidden" name="merchant_id" value="12925581">
+        <input type="hidden" name="merchant_key" value="metajukwvjt8u">
+        <input type="hidden" name="return_url" value="https://acua-node.herokuapp.com/payment/return">
+        <input type="hidden" name="cancel_url" value="https://acua-node.herokuapp.com/payment/cancel">
+        <input type="hidden" name="notify_url" value="https://acua-node.herokuapp.com/payment/notify">
+        <input type="hidden" name="amount" value="100.00">
+        <input type="hidden" name="item_name" value="Test Item">
+        <input type="hidden" name="item_description" value="A test product">
+        <input type="submit" value="Pay Now" />
+      </form>
+  </body>
+</html>
