@@ -138,6 +138,7 @@ function Acua_Cloud() {
   }
 
   function doSendRatingServiceMessage() {
+    var RATING_DELAY_DURATION = process.env.RATING_DELAY_DURATION || 86400000
     var query = firebase.database().ref('Orders').orderByChild('serviceStatus').equalTo('COMPLETED');
     query.once('value', snapshot => {
       snapshot.forEach(function(childSnapshot) {
@@ -155,7 +156,7 @@ function Acua_Cloud() {
 
         var delayedTime = (currentTime - completedAt);
 
-        if (serviceStatus == "COMPLETED" && isRateReminded==false && delayedTime >= 86400000){
+        if (serviceStatus == "COMPLETED" && isRateReminded==false && delayedTime >= RATING_DELAY_DURATION){
           firebase.database().ref('Orders').child(orderID).child('isRateReminded').set(true);
           var notificationRef = firebase.database().ref('Notifications').child(customerId).push();
           var notificationKey = notificationRef.key; 
