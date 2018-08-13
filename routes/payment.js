@@ -18,8 +18,9 @@ router.get('/cancel', function(req, res, next) {
 });
 
 router.get('/return', function(req, res, next) {
-    let orderId = req.query.orderId || '';
+    let orderId = req.query.orderId;
     if (orderId) {
+        console.log('orderId : ', orderId)
         firebase.database().ref('Orders').child(orderId).child('payStatus').update('PAID');
     }
     res.render('payment-cancel', {title: 'Payment', content:'Your payment succeed'})
