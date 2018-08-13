@@ -14,16 +14,16 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/cancel', function(req, res, next) {
-    res.render('payment-cancel', {title: 'Payment', content:'You cancelled payment'})
+    res.render('payment-result', {title: 'Payment', content:'You cancelled payment'})
 });
 
 router.get('/return', function(req, res, next) {
     let orderId = req.query.orderId;
     if (orderId) {
         console.log('orderId : ', orderId)
-        firebase.database().ref('Orders').child(orderId).child('payStatus').update('PAID');
+        firebase.database().ref('Orders').child(orderId).update({'payStatus': 'PAID'});
     }
-    res.render('payment-cancel', {title: 'Payment', content:'Your payment succeed'})
+    res.render('payment-result', {title: 'Payment', content:'Your payment succeed'})
 });
 
 router.get('/notify', function(req, res, next) {
