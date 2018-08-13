@@ -12,9 +12,9 @@
         <input type="hidden" name="merchant_id" value="10000100">
         <input type="hidden" name="merchant_key" value="46f0cd694581a">
         <!-- <input type="hidden" name="signature" value="abcdEFGH12345"> -->
-        <input type="hidden" name="return_url" value="https://acua-node.herokuapp.com/payment/return?<%= orderId %>">
+        <input type="hidden" name="return_url" value="https://acua-node.herokuapp.com/payment/return?orderId=<%= orderId %>">
         <input type="hidden" name="cancel_url" value="https://acua-node.herokuapp.com/payment/cancel">
-        <input type="hidden" name="notify_url" value="https://acua-node.herokuapp.com/payment/notify?<%= orderId %>">
+        <input type="hidden" name="notify_url" value="https://acua-node.herokuapp.com/payment/notify?orderId=<%= orderId %>">
         <input type="hidden" name="item_name" value="<%= orderName %>">
         <input type="hidden" name="amount" value="<%= price %>">
         <!-- <input type="hidden" name="item_description" value=""> -->
