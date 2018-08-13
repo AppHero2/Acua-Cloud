@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
     let orderId = req.query.orderId || '';
     let orderName = req.query.orderName || '';
     let price = req.query.price || 0.00;
-    res.render('payment', { 'orderId': orderId, 'orderName':orderName, 'price': price, 'customer': customer });
+    res.render('payment', { 'orderId': orderId, 'orderName':orderName, 'price': price });
 });
 
 router.get('/cancel', function(req, res, next) {
