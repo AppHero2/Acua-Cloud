@@ -1,15 +1,16 @@
 var express = require('express');
-/**
- * Stripe Initialization
- */ 
-
-var stripe = require('stripe')(process.env.STRIPE_SECURITY_KEY);
 var router = express.Router();
 
+var firebase = require('firebase');
+
+var stripe = require('stripe')(process.env.STRIPE_SECURITY_KEY);
+
+
 router.get('/', function(req, res, next) {
-    let order = req.query.order || '';
-    let cost  = req.query.cost || 0.00;
-    res.render('payment', { order: order, cost: cost });
+    let orderId = req.query.orderId || '';
+    let orderName = req.query.orderName || '';
+    let price = req.query.price || 0.00;
+    res.render('payment', { 'orderId': orderId, 'orderName':orderName, 'price': price, 'customer': customer });
 });
 
 router.get('/cancel', function(req, res, next) {
@@ -17,10 +18,18 @@ router.get('/cancel', function(req, res, next) {
 });
 
 router.get('/return', function(req, res, next) {
+    let orderId = req.query.orderId || '';
+    if (orderId) {
+        firebase.database().ref('Orders').child(orderId).child('payStatus').update('PAID');
+    }
     res.render('payment-cancel', {title: 'Payment', content:'Your payment succeed'})
 });
 
 router.get('/notify', function(req, res, next) {
+    // let orderId = req.query.orderId || '';
+    // if (orderId) {
+    //     firebase.database().ref('Orders').child(orderId).child('payStatus').update('PAID');
+    // }
     console.log('notify : ', req);
 });
 
