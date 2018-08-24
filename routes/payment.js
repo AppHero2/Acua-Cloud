@@ -35,6 +35,32 @@ router.get('/notify', function(req, res, next) {
 });
 
 
+// ----------- Verify Payment Method for Ad hoc ------------- //
+router.get('/verify', function(req, res, next){
+    let userId = req.query.userId
+    res.render('payment-verify', {userId: userId})
+});
+
+router.get('/verify_cancel', function(req, res, next) {
+    res.render('payment-result', {title: 'Payment Verification', content:'You cancelled payment verification'})
+});
+
+router.get('/verify_return', function(req, res, next) {
+    let userId = req.query.userId;
+    if (userId) {
+        console.log('userId : ', userId)
+        // firebase.database().ref('Orders').child(orderId).update({'payStatus': 'PAID'});
+    }
+    res.render('payment-result', {title: 'Payment Verification', content:'Your payment succeed'})
+});
+
+router.get('/verify_notify', function(req, res, next) {
+    // let orderId = req.query.orderId || '';
+    // if (orderId) {
+    //     firebase.database().ref('Orders').child(orderId).child('payStatus').update('PAID');
+    // }
+    console.log('notify : ', req);
+});
 
 ///----------------Stripe------------------------------///
 function createCharge(charge) {

@@ -8,16 +8,23 @@
     <h1>Checkout</h1>
     <p>Order : <%= orderName %></p>
     <p>Price : <%= price %></p>
-      <form action="https://sandbox.payfast.co.za/eng/process" method="POST">
-        <input type="hidden" name="merchant_id" value="10000100">
-        <input type="hidden" name="merchant_key" value="46f0cd694581a">
-        <!-- <input type="hidden" name="signature" value="abcdEFGH12345"> -->
+      <!-- <form action="https://sandbox.payfast.co.za/eng/process" method="POST"> -->
+      <form action="https://www.payfast.co.za/eng/process" method="POST">
+        
+        <input type="hidden" name="merchant_id" value="12925581"> 
+        <input type="hidden" name="merchant_key" value="metajukwvjt8u">
+
         <input type="hidden" name="return_url" value="https://acua-node.herokuapp.com/payment/return?orderId=<%= orderId %>">
         <input type="hidden" name="cancel_url" value="https://acua-node.herokuapp.com/payment/cancel">
         <input type="hidden" name="notify_url" value="https://acua-node.herokuapp.com/payment/notify?orderId=<%= orderId %>">
+
         <input type="hidden" name="item_name" value="<%= orderName %>">
         <input type="hidden" name="amount" value="<%= price %>">
-        <!-- <input type="hidden" name="item_description" value=""> -->
+        <input type="hidden" name="item_description" value="">
+        
+        <input type="hidden" name="subscription_type" value="2">
+        <input type="hidden" name="payment_method" value="cc">
+
         <input type="submit" value="Pay Now" />
       </form>
   </body>
