@@ -59,7 +59,7 @@ router.get('/verify_notify', function(req, res, next) {
     // if (orderId) {
     //     firebase.database().ref('Orders').child(orderId).child('payStatus').update('PAID');
     // }
-    console.log('notify : ', req);
+    console.log('verify_notify : ', req);
 });
 
 ///----------------Stripe------------------------------///
