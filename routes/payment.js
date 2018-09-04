@@ -32,6 +32,8 @@ router.get('/notify', function(req, res, next) {
     //     firebase.database().ref('Orders').child(orderId).child('payStatus').update('PAID');
     // }
     console.log('notify : ', req);
+    res.status(200).send('success');
+    res.end();
 });
 
 
