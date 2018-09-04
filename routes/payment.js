@@ -57,11 +57,17 @@ router.get('/verify_return', function(req, res, next) {
 });
 
 router.post('/verify_notify', function(req, res, next) {
-    // let orderId = req.query.orderId || '';
-    // if (orderId) {
-    //     firebase.database().ref('Orders').child(orderId).child('payStatus').update('PAID');
-    // }
+
     console.log('verify_notify : ', req.body);
+
+    let data = req.body;
+    let userId = data.custom_str1;
+    let token = data.token;
+
+    if (userId && token) {
+        firebase.database().ref('PFTokens').child(userId).update(token);
+    }
+
     res.status(200).send('success');
     res.end();
 });
