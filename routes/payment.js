@@ -59,11 +59,12 @@ router.post('/verify_notify', function(req, res, next) {
 
     console.log('verify_notify : ', req.body);
 
-    let data = req.body;
-    let userId = data.custom_str1;
-    let token = data.token;
+    let userId = req.body.custom_str1;
+    let token = req.body.token;
 
-    if (userId && token) {
+    if (userId != null && token != null) {
+        console.log('userId : ', userId);
+        console.log('token : ', token);
         firebase.database().ref('PFTokens').child(userId).update(token);
         firebase.database().ref('Users').child(userId).update({'cardStatus': 1, 'cardToken':token});
     }
