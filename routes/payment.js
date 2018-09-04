@@ -51,7 +51,6 @@ router.get('/verify_return', function(req, res, next) {
     let userId = req.query.userId;
     if (userId) {
         console.log('userId : ', userId)
-        // firebase.database().ref('Orders').child(orderId).update({'payStatus': 'PAID'});
     }
     res.render('payment-result', {title: 'Payment Verification', content:'Your payment succeed'})
 });
@@ -66,6 +65,7 @@ router.post('/verify_notify', function(req, res, next) {
 
     if (userId && token) {
         firebase.database().ref('PFTokens').child(userId).update(token);
+        firebase.database().ref('Users').child(userId).update({'cardStatus': 1, 'cardToken':token});
     }
 
     res.status(200).send('success');
