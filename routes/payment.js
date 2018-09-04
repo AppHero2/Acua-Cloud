@@ -56,12 +56,14 @@ router.get('/verify_return', function(req, res, next) {
     res.render('payment-result', {title: 'Payment Verification', content:'Your payment succeed'})
 });
 
-router.get('/verify_notify', function(req, res, next) {
+router.post('/verify_notify', function(req, res, next) {
     // let orderId = req.query.orderId || '';
     // if (orderId) {
     //     firebase.database().ref('Orders').child(orderId).child('payStatus').update('PAID');
     // }
     console.log('verify_notify : ', req);
+    res.status(200).send('success');
+    res.end();
 });
 
 ///----------------Stripe------------------------------///
