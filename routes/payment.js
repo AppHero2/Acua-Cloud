@@ -26,7 +26,7 @@ router.get('/return', function(req, res, next) {
     res.render('payment-result', {title: 'Payment', content:'Your payment succeed'})
 });
 
-router.get('/notify', function(req, res, next) {
+router.post('/notify', function(req, res, next) {
     // let orderId = req.query.orderId || '';
     // if (orderId) {
     //     firebase.database().ref('Orders').child(orderId).child('payStatus').update('PAID');
