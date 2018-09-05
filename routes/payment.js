@@ -11,7 +11,6 @@ admin.initializeApp({
 
 var stripe = require('stripe')(process.env.STRIPE_SECURITY_KEY);
 
-
 router.get('/', function(req, res, next) {
     let orderId = req.query.orderId || '';
     let orderName = req.query.orderName || '';
@@ -72,8 +71,8 @@ router.post('/verify_notify', function(req, res, next) {
         console.log('userId : ', userId);
         console.log('token : ', token);
         console.log('signature : ', signature);
-        firebase.database().ref('PFTokens').child(userId).update({'token': token, 'signature': signature});
-        firebase.database().ref('Users').child(userId).update({'cardStatus': 1, 'cardToken':token});
+        admin.database().ref('PFTokens').child(userId).update({'token': token, 'signature': signature});
+        admin.database().ref('Users').child(userId).update({'cardStatus': 1, 'cardToken':token});
     }
 
     res.status(200).send('success');
