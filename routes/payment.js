@@ -3,9 +3,9 @@ var router = express.Router();
 
 var firebase = require('firebase');
 var admin = require("firebase-admin");
-var serviceAccount = require("./acua-a3c6b-920f93b1cb9d.json");
+var certi = require("./acua.json");
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert(certi),
     databaseURL: "https://acua-a3c6b.firebaseio.com"
 });
 
