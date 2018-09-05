@@ -2,6 +2,12 @@ var express = require('express');
 var router = express.Router();
 
 var firebase = require('firebase');
+var admin = require("firebase-admin");
+var serviceAccount = require("./acua-a3c6b-920f93b1cb9d.json");
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://acua-a3c6b.firebaseio.com"
+});
 
 var stripe = require('stripe')(process.env.STRIPE_SECURITY_KEY);
 
@@ -57,15 +63,16 @@ router.get('/verify_return', function(req, res, next) {
 
 router.post('/verify_notify', function(req, res, next) {
 
-    console.log('verify_notify : ', req.body);
+    const payment_status = req.body.payment_status; // 'COMPLETE'
+    const userId = req.body.custom_str1;
+    const token = req.body.token;
+    const signature = req.body.signature;
 
-    let userId = req.body.custom_str1;
-    let token = req.body.token;
-
-    if (userId != null && token != null) {
+    if (userId != null && token != null && payment_status == "COMPLETE") {
         console.log('userId : ', userId);
         console.log('token : ', token);
-        firebase.database().ref('PFTokens').child(userId).update(token);
+        console.log('signature : ', signature);
+        firebase.database().ref('PFTokens').child(userId).update({'token': token, 'signature': signature});
         firebase.database().ref('Users').child(userId).update({'cardStatus': 1, 'cardToken':token});
     }
 
