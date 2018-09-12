@@ -28,7 +28,7 @@ router.get('/return', function(req, res, next) {
         console.log('orderId : ', orderId)
         firebase.database().ref('Orders').child(orderId).update({'payStatus': 'PAID'});
     }
-    res.render('payment-result', {title: 'Payment', content:'Your payment succeed'})
+    res.render('payment-result', {title: 'Payment', content:'Payment Successful'})
 });
 
 router.post('/notify', function(req, res, next) {
@@ -57,7 +57,7 @@ router.get('/verify_return', function(req, res, next) {
     if (userId) {
         console.log('userId : ', userId)
     }
-    res.render('payment-result', {title: 'Payment Verification', content:'Your payment succeed'})
+    res.render('payment-result', {title: 'Payment Verification', content:'Payment Successful'})
 });
 
 router.post('/verify_notify', function(req, res, next) {
